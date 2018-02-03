@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite" Version="1.0.107" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.107" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HalDiscordBot.Models\HalDiscordBot.Models.csproj" />
+    <ProjectReference Include="..\HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SQLScripts\CreateTableErrorLogs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQLScripts\CreateTableLogs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

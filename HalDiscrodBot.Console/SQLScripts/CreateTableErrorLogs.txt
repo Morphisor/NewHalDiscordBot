@@ -1,0 +1,7 @@
+﻿CREATE TABLE IF NOT EXISTS hal_error_logs(
+	ErrorLogId INTEGER PRIMARY KEY AUTOINCREMENT,
+	Message TEXT,
+	CreateDate INTEGER,
+	ExceptionMessage TEXT,
+	ExceptionStackTrace TEXT
+);
