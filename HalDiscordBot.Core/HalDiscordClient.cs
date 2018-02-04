@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HalDiscrodBot.Utils;
 using HalDiscordBot.Core.Config;
+using System.Linq;
 
 namespace HalDiscordBot.Core
 {
@@ -21,11 +22,13 @@ namespace HalDiscordBot.Core
 
         private ConsoleLogger _consoleLogger;
         private SQLiteLogger _SQLiteLogger;
+        private ConfigurationService _configService;
 
         public HalDiscordClient()
         {
             _consoleLogger = ConsoleLogger.Instance;
             _SQLiteLogger = SQLiteLogger.Instance;
+            _configService = ConfigurationService.Instance;
         }
 
         public async Task Connect()
@@ -39,10 +42,10 @@ namespace HalDiscordBot.Core
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
 
-            var configService = ConfigurationService.Instance;
-            string token = configService.Config.Token;
+            string token = _configService.Config.Token;
 
             _client.MessageReceived += MessageRecieved;
+            _client.UserVoiceStateUpdated += UserVoiceStateUpdated;
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
@@ -52,6 +55,25 @@ namespace HalDiscordBot.Core
             await _client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private async Task UserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
+        {
+            var guild = _client.Guilds.First(gld => gld.Name == _configService.Config.GuildName);
+            var mainChannel = guild.TextChannels.First(cnl => cnl.Name == _configService.Config.MainChannelName);
+
+            if (before.VoiceChannel != null && after.VoiceChannel != null)
+            {
+                await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
+            }
+            else if (before.VoiceChannel != null && after.VoiceChannel == null)
+            {
+                await mainChannel.SendMessageAsync($"User {user.Username} left.");
+            }
+            else if (before.VoiceChannel == null && after.VoiceChannel != null)
+            {
+                await mainChannel.SendMessageAsync($"User {user.Username} joined.");
+            }
         }
 
         private async Task MessageRecieved(SocketMessage message)
