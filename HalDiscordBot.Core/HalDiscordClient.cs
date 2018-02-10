@@ -62,7 +62,7 @@ namespace HalDiscordBot.Core
             var guild = _client.Guilds.First(gld => gld.Name == _configService.Config.GuildName);
             var mainChannel = guild.TextChannels.First(cnl => cnl.Name == _configService.Config.MainChannelName);
 
-            if (before.VoiceChannel != null && after.VoiceChannel != null)
+            if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name)
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
             }

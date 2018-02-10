@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Text;
+using HalDiscordBot.Models.Misc;
 using HalDiscrodBot.Utils;
 
 namespace HalDiscrodBot.DataAccess
@@ -16,6 +17,14 @@ namespace HalDiscrodBot.DataAccess
 
         protected SQLiteConnection _connection;
         protected string tableName;
+
+        public event OnPreSaveHandler OnPreSave;
+        public event OnPostSaveHandler OnPostSave;
+        public event OnErrorSaveHandler OnError;
+
+        public delegate void OnPreSaveHandler(OnPreSaveArgs<Dto> e);
+        public delegate void OnPostSaveHandler(OnPostSaveArgs<Dto> e);
+        public delegate void OnErrorSaveHandler(OnErrorArgs<Dto> e);
 
         public SQLiteBaseService()
         {
@@ -43,6 +52,7 @@ namespace HalDiscrodBot.DataAccess
             bool toReturn = false;
             var entity = MapDtoToEntity(model);
             var command = SQLiteUtils.InsertCommand<Entity>(tableName, entity);
+            OnPreSave?.Invoke(new OnPreSaveArgs<Dto>(model));
 
             try
             {
@@ -50,13 +60,15 @@ namespace HalDiscrodBot.DataAccess
                 command.Connection = _connection;
                 command.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 toReturn = false;
+                OnError?.Invoke(new OnErrorArgs<Dto>(model, ex));
             }
             finally
             {
                 _connection.Close();
+                OnPostSave?.Invoke(new OnPostSaveArgs<Dto>(model, toReturn));
             }
 
             return toReturn;
