@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Config\**" />
+    <EmbeddedResource Remove="Config\**" />
+    <None Remove="Config\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HalDiscordBot.Core\HalDiscordBot.Core.csproj" />
   </ItemGroup>
 
