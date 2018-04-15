@@ -36,13 +36,15 @@ namespace HalDiscordBot.Core.Commands
             if (role != null && !role.Color.Equals(actualColor))
             {
                 await role.ModifyAsync((prop) => { prop.Color = actualColor; });
+                await Context.Channel.SendMessageAsync("Updated color");
+
                 var castedUser = Context.User as SocketGuildUser;
                 if (!castedUser.Roles.Any(rl => rl.Name.Equals(Context.User.Username + "-Color") ))
                 {
                     try
                     {
                         await castedUser.AddRoleAsync(role);
-                        await Context.Channel.SendMessageAsync("Updated color");
+                        await Context.Channel.SendMessageAsync("Assigned color");
                     }
                     catch (Exception ex)
                     {
