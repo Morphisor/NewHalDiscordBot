@@ -14,4 +14,10 @@
     <ProjectReference Include="..\HalDiscordBot.Rest\HalDiscordBot.Rest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Config\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

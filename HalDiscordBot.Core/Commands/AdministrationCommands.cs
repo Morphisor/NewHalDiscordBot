@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Discord;
+using Discord.WebSocket;
 
 namespace HalDiscordBot.Core.Commands
 {
@@ -19,6 +20,53 @@ namespace HalDiscordBot.Core.Commands
             var transormed = messages.SelectMany(msg => msg);
             var toDelete = transormed.Where(msg => msg.Author.Username == userToPrune);
             await Context.Channel.DeleteMessagesAsync(toDelete);
+        }
+
+        [Command("color")]
+        [Summary("Assign the specified color to the user")]
+        public async Task AssignColor([Remainder] [Summary("The hex color")] string colorCode)
+        {
+            colorCode = colorCode.Replace("#", "");
+            int converted = Convert.ToInt32(colorCode, 16);
+            System.Drawing.Color convertedColor = System.Drawing.Color.FromArgb(converted);
+            Color actualColor = new Color(convertedColor.R, convertedColor.G, convertedColor.B);
+
+            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.Equals(Context.User.Username + "-Color"));
+
+            if (role != null && !role.Color.Equals(actualColor))
+            {
+                await role.ModifyAsync((prop) => { prop.Color = actualColor; });
+                var castedUser = Context.User as SocketGuildUser;
+                if (!castedUser.Roles.Any(rl => rl.Name.Equals(Context.User.Username + "-Color") ))
+                {
+                    try
+                    {
+                        await castedUser.AddRoleAsync(role);
+                        await Context.Channel.SendMessageAsync("Updated color");
+                    }
+                    catch (Exception ex)
+                    {
+                        await Context.Channel.SendMessageAsync("Something went wrong!");
+                        _SQLiteLogger.LogError("Error updating color", ex.Message, ex.StackTrace);
+                    }
+                }
+            }
+            else if (role == null)
+            {
+                var newRole = await Context.Guild.CreateRoleAsync(Context.User.Username + "-Color", null, actualColor);
+                var castedUser = Context.User as SocketGuildUser;
+                try
+                {
+                    await castedUser.AddRoleAsync(newRole);
+                    await Context.Channel.SendMessageAsync("Color created and updated");
+                }
+                catch (Exception ex)
+                {
+                    await Context.Channel.SendMessageAsync("Something went wrong!");
+                    _SQLiteLogger.LogError("Error creating color", ex.Message, ex.StackTrace);
+                }
+            }
+
         }
     }
 }
