@@ -26,7 +26,7 @@ namespace HalDiscordBot.Core.Config
         
         private ConfigurationService()
         {
-            var configPath = Environment.CurrentDirectory + "\\Config\\config.json";
+            var configPath = Environment.CurrentDirectory + "\\Config\\config.json"; 
             string configString = File.ReadAllText(configPath);
             Config = JsonConvert.DeserializeObject<Configuration>(configString);
         }
