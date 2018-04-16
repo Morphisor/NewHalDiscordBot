@@ -1,10 +1,14 @@
 ﻿using Discord.Commands;
 using HalDiscordBot.Rest;
+using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using HalDiscrodBot.Utils;
 
 namespace HalDiscordBot.Core.Commands
 {
@@ -37,5 +41,27 @@ namespace HalDiscordBot.Core.Commands
 
             await ReplyAsync(link);
         }
+
+        [Command("memelist")]
+        [Summary("List of avaiable memes")]
+        public async Task MemeList()
+        {
+            RestService restService = new RestService("https://memegen.link/api/templates/", HttpVerb.GET);
+            var response = await restService.MakeRequest();
+            var parsed = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);
+            var memes = parsed.Select(entry => Path.GetFileName(entry.Value));
+            await Context.Channel.SendTableAsync(memes, x => $"{x,-17}", 3);
+        }
+
+        [Command("memegen")]
+        [Summary("Generate meme")]
+        public async Task MemeGen([Summary("meme type")] string meme, [Summary("top text")] string top, [Remainder][Summary("bottom text")]string bottom)
+        {
+            var url = $"http://memegen.link/{meme}/{top}/{bottom}.jpg";
+            await Context.Channel.SendMessageAsync(url);
+
+        }
+
+
     }
 }

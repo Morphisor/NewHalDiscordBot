@@ -12,6 +12,7 @@
     <ProjectReference Include="..\HalDiscordBot.Log\HalDiscordBot.Log.csproj" />
     <ProjectReference Include="..\HalDiscordBot.Models\HalDiscordBot.Models.csproj" />
     <ProjectReference Include="..\HalDiscordBot.Rest\HalDiscordBot.Rest.csproj" />
+    <ProjectReference Include="..\HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
