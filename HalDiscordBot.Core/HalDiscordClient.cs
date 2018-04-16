@@ -59,10 +59,11 @@ namespace HalDiscordBot.Core
 
         private async Task UserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
         {
-            var guild = _client.Guilds.First(gld => gld.Name == _configService.Config.GuildName);
+            var userCasted = user as SocketGuildUser;
+            var guild = userCasted.Guild;
             var mainChannel = guild.TextChannels.First(cnl => cnl.Name == _configService.Config.MainChannelName);
 
-            if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name)
+            if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
             }
