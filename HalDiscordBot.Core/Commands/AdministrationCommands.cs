@@ -48,8 +48,7 @@ namespace HalDiscordBot.Core.Commands
                     }
                     catch (Exception ex)
                     {
-                        await Context.Channel.SendMessageAsync("Something went wrong!");
-                        _SQLiteLogger.LogError("Error updating color", ex.Message, ex.StackTrace);
+                        await HandleError("Error updating color", ex);
                     }
                 }
             }
@@ -64,11 +63,35 @@ namespace HalDiscordBot.Core.Commands
                 }
                 catch (Exception ex)
                 {
-                    await Context.Channel.SendMessageAsync("Something went wrong!");
-                    _SQLiteLogger.LogError("Error creating color", ex.Message, ex.StackTrace);
+                    await HandleError("Error creating color", ex);
                 }
             }
 
+        }
+
+        [Command("k")]
+        [Summary("Kicks the specyfied user")]
+        public async Task Kick([Remainder] [Summary("The user to kick")] string userName)
+        {
+            var user = Context.Guild.Users.FirstOrDefault(usr => usr.Username == userName);
+
+            if (user == null || (user != null && user.VoiceChannel == null))
+            {
+                await Context.Channel.SendMessageAsync("User not found or not in a voice channel!");
+                return;
+            }
+
+            try
+            {
+                var kickChannel = await Context.Guild.CreateVoiceChannelAsync("KickChannel");
+                await user.ModifyAsync((prop) => prop.Channel = kickChannel);
+                await kickChannel.DeleteAsync();
+                await Context.Channel.SendMessageAsync($"Kicked user {userName}");
+            }
+            catch (Exception ex)
+            {
+                await HandleError("Error kicking user", ex);
+            }
         }
     }
 }
