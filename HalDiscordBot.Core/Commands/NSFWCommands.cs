@@ -19,8 +19,8 @@ namespace HalDiscordBot.Core.Commands
             try
             {
                 var response = await restService.MakeRequest($"/{rng.Next(10330)}");
-                JObject responseParsed = JObject.Parse(response);
-                var image = responseParsed["preview"];
+                JToken responseParsed = JToken.Parse(response);
+                var image = responseParsed[0]["preview"];
                 await Context.Channel.SendMessageAsync($"http://media.oboobs.ru/{image}");
             }
             catch (Exception ex)
@@ -38,8 +38,8 @@ namespace HalDiscordBot.Core.Commands
             try
             {
                 var response = await restService.MakeRequest($"/{rng.Next(4335)}");
-                JObject responseParsed = JObject.Parse(response);
-                var image = responseParsed["preview"];
+                JToken responseParsed = JToken.Parse(response);
+                var image = responseParsed[0]["preview"];
                 await Context.Channel.SendMessageAsync($"http://media.obutts.ru/{image}");
             }
             catch (Exception ex)
