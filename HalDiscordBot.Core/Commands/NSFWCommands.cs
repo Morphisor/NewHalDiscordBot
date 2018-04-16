@@ -34,7 +34,7 @@ namespace HalDiscordBot.Core.Commands
         public async Task Ass()
         {
             var rng = new Random();
-            var restService = new RestService("http://api.obutts.ru/butts/");
+            var restService = new RestService("http://api.obutts.ru/butts");
             try
             {
                 var response = await restService.MakeRequest($"/{rng.Next(4335)}");
