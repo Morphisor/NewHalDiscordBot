@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
+using HalDiscrodBot.Utils.Attributes;
 
 namespace HalDiscrodBot.Utils
 {
@@ -41,15 +43,27 @@ namespace HalDiscrodBot.Utils
             builder.Length--;
         }
 
-        public static Task SendTableAsync<T>(this IMessageChannel ch, string seed, IEnumerable<T> items, Func<T, string> howToPrint, int columns = 3)
+        public static string GetSQLiteType(this PropertyInfo prop)
         {
-            var i = 0;
-            return ch.SendMessageAsync($@"{seed}```css
-{string.Join("\n", items.GroupBy(item => (i++) / columns).Select(ig => string.Concat(ig.Select(el => howToPrint(el)))))}
-```");
-        }
+            var pKeyAttribute = prop.GetCustomAttribute<SQLitePrimaryKey>();
 
-        public static Task SendTableAsync<T>(this IMessageChannel ch, IEnumerable<T> items, Func<T, string> howToPrint, int columns = 3) =>
-            ch.SendTableAsync("", items, howToPrint, columns);
+            if (pKeyAttribute != null && prop.PropertyType != typeof(int))
+                throw new Exception("The primary key property must be of type int!");
+            else if (pKeyAttribute != null)
+                return "INTEGER PRIMARY KEY AUTOINCREMENT";
+
+
+            string toReturn = null;
+            if (prop.PropertyType == typeof(int))
+                toReturn = "INTEGER";
+            else if (prop.PropertyType == typeof(DateTime))
+                toReturn = "INTEGER";
+            else if (prop.PropertyType == typeof(bool))
+                toReturn = "INTEGER";
+            else
+                toReturn = "TEXT";
+
+            return toReturn;
+        }
     }
 }

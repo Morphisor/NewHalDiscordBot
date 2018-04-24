@@ -26,7 +26,7 @@ namespace HalDiscrodBot.DataAccess
         public delegate void OnPostSaveHandler(OnPostSaveArgs<Dto> e);
         public delegate void OnErrorSaveHandler(OnErrorArgs<Dto> e);
 
-        public SQLiteBaseService()
+        public SQLiteBaseService(string tBName)
         {
             _databaseFolder = Environment.CurrentDirectory + "\\Database";
             _databasePath = Environment.CurrentDirectory + "\\Database\\HalDatabase.db";
@@ -44,7 +44,22 @@ namespace HalDiscrodBot.DataAccess
             }
 
             _connection = new SQLiteConnection(_connectionString);
-            InitDb();
+            tableName = tBName;
+            CreateTable();
+        }
+
+        public bool CreateTable()
+        {
+            bool toReturn = false;
+            var command = SQLiteUtils.CreateTableCommant<Entity>(tableName);
+
+            _connection.Open();
+            command.Connection = _connection;
+            command.ExecuteNonQuery();
+            _connection.Close();
+
+            toReturn = true;
+            return toReturn;
         }
 
         public bool Insert(Dto model)
@@ -74,7 +89,6 @@ namespace HalDiscrodBot.DataAccess
             return toReturn;
         }
 
-        internal abstract void InitDb();
         internal abstract Dto MapEntityToDto(Entity model);
         internal abstract Entity MapDtoToEntity(Dto model);
     }

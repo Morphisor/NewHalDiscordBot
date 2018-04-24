@@ -13,20 +13,9 @@ namespace HalDiscrodBot.DataAccess.Services
     public class DiscordLogService : SQLiteBaseService<DiscordLogDto, DiscordLog>
     {
 
-        public DiscordLogService() : base()
+        public DiscordLogService() : base("hal_logs")
         {
-            tableName = "hal_logs";
-        }
 
-        internal override void InitDb()
-        {
-            _connection.Open();
-            string[] command = File.ReadAllLines(_sqlScriptPath + "CreateTableLogs.txt");
-            using (SQLiteCommand SQLcommand = new SQLiteCommand(string.Join("", command), _connection))
-            {
-                SQLcommand.ExecuteNonQuery();
-            }
-            _connection.Close();
         }
 
         internal override DiscordLog MapDtoToEntity(DiscordLogDto model)

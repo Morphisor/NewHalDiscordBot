@@ -11,21 +11,11 @@ namespace HalDiscrodBot.DataAccess.Services
 {
     public class ErrorLogService : SQLiteBaseService<ErrorLogDto, ErrorLog>
     {
-        public ErrorLogService() : base()
+        public ErrorLogService() : base("hal_error_logs")
         {
-            tableName = "hal_error_logs";
+
         }
 
-        internal override void InitDb()
-        {
-            _connection.Open();
-            string[] command = File.ReadAllLines(_sqlScriptPath + "CreateTableErrorLogs.txt");
-            using (SQLiteCommand SQLcommand = new SQLiteCommand(string.Join("", command), _connection))
-            {
-                SQLcommand.ExecuteNonQuery();
-            }
-            _connection.Close();
-        }
 
         internal override ErrorLog MapDtoToEntity(ErrorLogDto model)
         {

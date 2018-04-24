@@ -14,13 +14,4 @@
     <ProjectReference Include="..\HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="SQLScripts\CreateTableErrorLogs.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SQLScripts\CreateTableLogs.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
