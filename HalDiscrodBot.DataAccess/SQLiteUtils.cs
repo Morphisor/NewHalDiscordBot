@@ -65,5 +65,26 @@ namespace HalDiscrodBot.DataAccess
 
             return toReturn;
         }
+
+        internal static List<T> ReadEntity<T>(SQLiteDataReader reader)
+        {
+            var properties = typeof(T).GetProperties();
+            var toReturn = new List<T>();
+
+            if (!reader.HasRows) return toReturn;
+
+            while (reader.Read())
+            {
+                var instance = Activator.CreateInstance<T>();
+                foreach (var prop in properties)
+                {
+                    var value = reader.GetValue(reader.GetOrdinal(prop.Name));
+                    prop.SetValue(instance, Convert.ChangeType(value, prop.PropertyType));
+                }
+                toReturn.Add(instance);
+            }
+
+            return toReturn;
+        }
     }
 }
