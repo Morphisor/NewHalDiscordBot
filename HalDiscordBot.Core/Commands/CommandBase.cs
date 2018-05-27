@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HalDiscordBot.Core.Commands
 {
-    public class CommandBase : ModuleBase<SocketCommandContext>
+    public abstract class CommandBase : ModuleBase<SocketCommandContext>
     {
         protected SQLiteLogger _SQLiteLogger;
 
