@@ -89,6 +89,36 @@ namespace HalDiscrodBot.DataAccess
             return toReturn;
         }
 
+        public T Get<T>(Func<List<Dto>, T> lambda)
+        {
+            var command = new SQLiteCommand($"SELECT * FROM {tableName}");
+            List<Dto> dtos = new List<Dto>();
+
+            try
+            {
+                _connection.Open();
+                command.Connection = _connection;
+                var reader = command.ExecuteReader();
+                List<Entity> entities = SQLiteUtils.ReadEntity<Entity>(reader);
+                foreach (var e in entities)
+                {
+                    var dto = MapEntityToDto(e);
+                    dtos.Add(dto);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke(new OnErrorArgs<Dto>(default(Dto), ex));
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+            var result = lambda(dtos);
+            return result;
+        }
+
         internal abstract Dto MapEntityToDto(Entity model);
         internal abstract Entity MapDtoToEntity(Dto model);
     }

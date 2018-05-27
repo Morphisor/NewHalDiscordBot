@@ -60,7 +60,7 @@ namespace HalDiscordBot.Log
 
         private void OnDiscordLogError(OnErrorArgs<DiscordLogDto> e)
         {
-            LogError("Error Logging discord error", e.Error.Message, e.Error.StackTrace);
+            LogError("SQLite service threw an error", e.Error.Message, e.Error.StackTrace);
         }
     }
 }
