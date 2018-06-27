@@ -14,8 +14,6 @@ namespace HalDiscrodBot.DataAccess
         protected static string _databasePath;
         protected static string _connectionString;
         protected static string _sqlScriptPath;
-
-        protected SQLiteConnection _connection;
         protected string tableName;
 
         public event OnPreSaveHandler OnPreSave;
@@ -43,7 +41,6 @@ namespace HalDiscrodBot.DataAccess
                 SQLiteConnection.CreateFile(_databasePath);
             }
 
-            _connection = new SQLiteConnection(_connectionString);
             tableName = tBName;
             CreateTable();
         }
@@ -52,11 +49,11 @@ namespace HalDiscrodBot.DataAccess
         {
             bool toReturn = false;
             var command = SQLiteUtils.CreateTableCommant<Entity>(tableName);
-
-            _connection.Open();
-            command.Connection = _connection;
+            var connection = new SQLiteConnection(_connectionString);
+            connection.Open();
+            command.Connection = connection;
             command.ExecuteNonQuery();
-            _connection.Close();
+            connection.Close();
 
             toReturn = true;
             return toReturn;
@@ -68,11 +65,11 @@ namespace HalDiscrodBot.DataAccess
             var entity = MapDtoToEntity(model);
             var command = SQLiteUtils.InsertCommand<Entity>(tableName, entity);
             OnPreSave?.Invoke(new OnPreSaveArgs<Dto>(model));
-
+            var connection = new SQLiteConnection(_connectionString);
             try
             {
-                _connection.Open();
-                command.Connection = _connection;
+                connection.Open();
+                command.Connection = connection;
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -82,7 +79,7 @@ namespace HalDiscrodBot.DataAccess
             }
             finally
             {
-                _connection.Close();
+                connection.Close();
                 OnPostSave?.Invoke(new OnPostSaveArgs<Dto>(model, toReturn));
             }
 
@@ -93,11 +90,11 @@ namespace HalDiscrodBot.DataAccess
         {
             var command = new SQLiteCommand($"SELECT * FROM {tableName}");
             List<Dto> dtos = new List<Dto>();
-
+            var connection = new SQLiteConnection(_connectionString);
             try
             {
-                _connection.Open();
-                command.Connection = _connection;
+                connection.Open();
+                command.Connection = connection;
                 var reader = command.ExecuteReader();
                 List<Entity> entities = SQLiteUtils.ReadEntity<Entity>(reader);
                 foreach (var e in entities)
@@ -112,7 +109,7 @@ namespace HalDiscrodBot.DataAccess
             }
             finally
             {
-                _connection.Close();
+                connection.Close();
             }
 
             var result = new List<Dto>();
