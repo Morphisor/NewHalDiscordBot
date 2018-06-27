@@ -8,12 +8,14 @@ namespace HalDiscordBot.Models.Misc
     {
         public T Model { get; set; }
         public Exception Error { get; set; }
+        public OnErrorType Type { get; set; }
 
         public OnErrorArgs() { }
-        public OnErrorArgs(T model, Exception error)
+        public OnErrorArgs(T model, Exception error, OnErrorType type)
         {
             Model = model;
             Error = error;
+            Type = type;
         }
     }
 }

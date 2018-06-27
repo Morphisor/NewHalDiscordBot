@@ -44,6 +44,7 @@ namespace HalDiscordBot.Log
                 Source = source
             };
             _discordLogService.Insert(discordLogDto);
+            _discordLogService.Get(dto => dto.LogSeverity == LogSeverity.Critical);
         }
 
         public void LogError(string message, string exMessage, string stackTrace)

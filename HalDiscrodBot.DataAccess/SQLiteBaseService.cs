@@ -78,7 +78,7 @@ namespace HalDiscrodBot.DataAccess
             catch (Exception ex)
             {
                 toReturn = false;
-                OnError?.Invoke(new OnErrorArgs<Dto>(model, ex));
+                OnError?.Invoke(new OnErrorArgs<Dto>(model, ex, OnErrorType.Insert));
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace HalDiscrodBot.DataAccess
             return toReturn;
         }
 
-        public T Get<T>(Func<List<Dto>, T> lambda)
+        public IEnumerable<Dto> Get(Func<Dto, bool> lambda)
         {
             var command = new SQLiteCommand($"SELECT * FROM {tableName}");
             List<Dto> dtos = new List<Dto>();
@@ -108,14 +108,20 @@ namespace HalDiscrodBot.DataAccess
             }
             catch (Exception ex)
             {
-                OnError?.Invoke(new OnErrorArgs<Dto>(default(Dto), ex));
+                OnError?.Invoke(new OnErrorArgs<Dto>(default(Dto), ex, OnErrorType.Get));
             }
             finally
             {
                 _connection.Close();
             }
 
-            var result = lambda(dtos);
+            var result = new List<Dto>();
+            foreach (var dto in dtos)
+            {
+                if (lambda(dto))
+                    result.Add(dto);
+            }
+            
             return result;
         }
 
