@@ -47,7 +47,7 @@ namespace Morphisor.SQLiteORM
         public bool CreateTable()
         {
             bool toReturn = false;
-            var command = SQLiteUtils.CreateTableCommant<Entity>(tableName);
+            var command = SQLiteUtils.CreateTableCommand<Entity>(tableName);
             var connection = new SQLiteConnection(_connectionString);
             connection.Open();
             command.Connection = connection;

@@ -47,7 +47,7 @@ namespace Morphisor.SQLiteORM
             return toReturn;
         }
 
-        internal static SQLiteCommand CreateTableCommant<T>(string tableName)
+        internal static SQLiteCommand CreateTableCommand<T>(string tableName)
         {
             var toReturn = new SQLiteCommand();
             var command = new StringBuilder($"CREATE TABLE IF NOT EXISTS {tableName}(");
