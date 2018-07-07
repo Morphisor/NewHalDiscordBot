@@ -1,7 +1,7 @@
 ﻿using Discord;
 using HalDiscordBot.Models.Dtos;
-using HalDiscordBot.Models.Misc;
 using HalDiscrodBot.DataAccess.Services;
+using Morphisor.SQLiteORM.Models.Misc;
 using System;
 using System.Collections.Generic;
 using System.Text;

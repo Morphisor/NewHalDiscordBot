@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HalDiscrodBot.Utils.Attributes
+namespace Morphisor.SQLiteORM.Attributes
 {
     public class SQLitePrimaryKey : Attribute
     {

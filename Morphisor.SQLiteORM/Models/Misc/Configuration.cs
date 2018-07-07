@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HalDiscordBot.Models.Misc
+namespace Morphisor.SQLiteORM.Models.Misc
 {
     public class Configuration
     {

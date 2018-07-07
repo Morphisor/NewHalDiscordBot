@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj" />
+    <ProjectReference Include="..\Morphisor.SQLiteORM\Morphisor.SQLiteORM.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Morphisor.SQLiteORM.Models.Misc;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Text;
-using HalDiscordBot.Models.Misc;
-using HalDiscrodBot.Utils;
 
-namespace HalDiscrodBot.DataAccess
+namespace Morphisor.SQLiteORM
 {
     public abstract class SQLiteBaseService<Dto, Entity>
     {
