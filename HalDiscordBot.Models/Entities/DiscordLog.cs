@@ -1,4 +1,4 @@
-﻿using Morphisor.SQLiteORM.Attributes;
+﻿using HalDiscrodBot.Utils.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;

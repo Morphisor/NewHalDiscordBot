@@ -15,9 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscrodBot.DataAccess", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscrodBot.Utils", "HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj", "{42B66654-FFA4-4E41-B6A5-68A1433F9269}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscordBot.Models", "HalDiscordBot.Models\HalDiscordBot.Models.csproj", "{2CD30F12-0DF0-4510-ACD6-B7F91CD97E99}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Morphisor.SQLiteORM", "Morphisor.SQLiteORM\Morphisor.SQLiteORM.csproj", "{4BD32F6B-598F-4206-92A2-CFA06E64E1E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalDiscordBot.Models", "HalDiscordBot.Models\HalDiscordBot.Models.csproj", "{2CD30F12-0DF0-4510-ACD6-B7F91CD97E99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +51,6 @@ Global
 		{2CD30F12-0DF0-4510-ACD6-B7F91CD97E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD30F12-0DF0-4510-ACD6-B7F91CD97E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD30F12-0DF0-4510-ACD6-B7F91CD97E99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BD32F6B-598F-4206-92A2-CFA06E64E1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BD32F6B-598F-4206-92A2-CFA06E64E1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BD32F6B-598F-4206-92A2-CFA06E64E1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BD32F6B-598F-4206-92A2-CFA06E64E1E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

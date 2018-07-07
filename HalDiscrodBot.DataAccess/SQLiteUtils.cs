@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
 using System.Linq;
+using HalDiscrodBot.Utils;
+using HalDiscrodBot.Utils.Attributes;
 using System.Reflection;
-using Morphisor.SQLiteORM.Attributes;
-using Morphisor.SQLiteORM.Extensions;
 
-namespace Morphisor.SQLiteORM
+namespace HalDiscrodBot.DataAccess
 {
     internal static class SQLiteUtils
     {

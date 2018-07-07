@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Morphisor.SQLiteORM.Models.Misc
+namespace HalDiscordBot.Models.Misc
 {
     public enum OnErrorType
     {

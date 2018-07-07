@@ -1,7 +1,11 @@
 ﻿using HalDiscordBot.Models.Dtos;
 using HalDiscordBot.Models.Entities;
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
+using System.Text;
 using HalDiscrodBot.Utils;
-using Morphisor.SQLiteORM;
 
 namespace HalDiscrodBot.DataAccess.Services
 {
@@ -11,7 +15,8 @@ namespace HalDiscrodBot.DataAccess.Services
         {
 
         }
-        
+
+
         internal override ErrorLog MapDtoToEntity(ErrorLogDto model)
         {
             var toReturn = new ErrorLog()
