@@ -86,7 +86,47 @@ namespace HalDiscrodBot.DataAccess
             return toReturn;
         }
 
+        public bool Update(Dto model)
+        {
+            bool toReturn = false;
+            var entity = MapDtoToEntity(model);
+            var command = SQLiteUtils.UpdateCommand<Entity>(tableName, entity);
+            OnPreSave?.Invoke(new OnPreSaveArgs<Dto>(model));
+            var connection = new SQLiteConnection(_connectionString);
+            try
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                toReturn = false;
+                OnError?.Invoke(new OnErrorArgs<Dto>(model, ex, OnErrorType.Update));
+            }
+            finally
+            {
+                connection.Clone();
+                OnPostSave?.Invoke(new OnPostSaveArgs<Dto>(model, toReturn));
+            }
+
+            return toReturn;
+        }
+
         public IEnumerable<Dto> Get(Func<Dto, bool> lambda)
+        {
+            var dtos = GetAll();
+            var result = new List<Dto>();
+            foreach (var dto in dtos)
+            {
+                if (lambda(dto))
+                    result.Add(dto);
+            }
+
+            return result;
+        }
+
+        public IEnumerable<Dto> GetAll()
         {
             var command = new SQLiteCommand($"SELECT * FROM {tableName}");
             List<Dto> dtos = new List<Dto>();
@@ -96,7 +136,7 @@ namespace HalDiscrodBot.DataAccess
                 connection.Open();
                 command.Connection = connection;
                 var reader = command.ExecuteReader();
-                List<Entity> entities = SQLiteUtils.ReadEntity<Entity>(reader);
+                List<Entity> entities = SQLiteUtils.ReadEntities<Entity>(reader);
                 foreach (var e in entities)
                 {
                     var dto = MapEntityToDto(e);
@@ -112,14 +152,7 @@ namespace HalDiscrodBot.DataAccess
                 connection.Close();
             }
 
-            var result = new List<Dto>();
-            foreach (var dto in dtos)
-            {
-                if (lambda(dto))
-                    result.Add(dto);
-            }
-            
-            return result;
+            return dtos;
         }
 
         internal abstract Dto MapEntityToDto(Entity model);
