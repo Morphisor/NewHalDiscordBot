@@ -26,11 +26,14 @@ namespace HalDiscordBot.Log
 
         private DiscordLogService _discordLogService;
         private ErrorLogService _errorLogService;
+        private UserAccessService _userAccessService;
 
         private SQLiteLogger() {
             _discordLogService = new DiscordLogService();
             _errorLogService = new ErrorLogService();
-            _discordLogService.OnError += OnDiscordLogError;
+            _userAccessService = new UserAccessService();
+            _discordLogService.OnError += OnLogError;
+            _userAccessService.OnError += OnLogError;
         }
 
         public void LogDiscordError(string message, LogSeverity severity, string source, string exMessage)
@@ -44,7 +47,6 @@ namespace HalDiscordBot.Log
                 Source = source
             };
             _discordLogService.Insert(discordLogDto);
-            _discordLogService.Get(dto => dto.LogSeverity == LogSeverity.Critical);
         }
 
         public void LogError(string message, string exMessage, string stackTrace)
@@ -59,7 +61,19 @@ namespace HalDiscordBot.Log
             _errorLogService.Insert(errorLog);
         }
 
-        private void OnDiscordLogError(OnErrorArgs<DiscordLogDto> e)
+        public void LogUserAccess(string userName, DateTime enterDate, DateTime exitDate, string guildName)
+        {
+            var userAccess = new UserAccessDto()
+            {
+                UserName = userName,
+                EnterDate = enterDate,
+                ExitDate = exitDate,
+                ServerName = guildName
+            };
+            _userAccessService.Insert(userAccess);
+        }
+
+        private void OnLogError<T>(OnErrorArgs<T> e)
         {
             LogError("SQLite service threw an error", e.Error.Message, e.Error.StackTrace);
         }

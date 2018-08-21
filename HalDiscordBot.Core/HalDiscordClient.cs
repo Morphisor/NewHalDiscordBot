@@ -24,11 +24,14 @@ namespace HalDiscordBot.Core
         private SQLiteLogger _SQLiteLogger;
         private ConfigurationService _configService;
 
+        private Dictionary<string, DateTime> _userAccessTracker;
+
         public HalDiscordClient()
         {
             _consoleLogger = ConsoleLogger.Instance;
             _SQLiteLogger = SQLiteLogger.Instance;
             _configService = ConfigurationService.Instance;
+            _userAccessTracker = new Dictionary<string, DateTime>();
         }
 
         public async Task Connect()
@@ -70,10 +73,12 @@ namespace HalDiscordBot.Core
             else if (before.VoiceChannel != null && after.VoiceChannel == null)
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} left.");
+                TrackUserExit(user.Username, guild.Name);
             }
             else if (before.VoiceChannel == null && after.VoiceChannel != null)
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} joined.");
+                TrackUserEnter(user.Username, guild.Name);
             }
         }
 
@@ -98,6 +103,32 @@ namespace HalDiscordBot.Core
 
             _consoleLogger.Log(message.ToString());
             return Task.CompletedTask;
+        }
+
+        private void TrackUserEnter(string userName, string guildName)
+        {
+            if (!_userAccessTracker.ContainsKey(userName))
+            {
+                _userAccessTracker.Add(userName, DateTime.Now);
+            }
+            else
+            {
+                _SQLiteLogger.LogError("UserAccessTracking - key already present", $"the user {userName} was already present in the dc", null);
+            }
+        }
+
+        private void TrackUserExit(string userName, string guildName)
+        {
+            if(_userAccessTracker.ContainsKey(userName))
+            {
+                var enterDate = _userAccessTracker[userName];
+                _userAccessTracker.Remove(userName);
+                _SQLiteLogger.LogUserAccess(userName, enterDate, DateTime.Now, guildName);
+            }
+            else
+            {
+                _SQLiteLogger.LogError("UserAccessTracking - key missing", $"the user {userName} was missing from the dc", null);
+            }
         }
 
     }
