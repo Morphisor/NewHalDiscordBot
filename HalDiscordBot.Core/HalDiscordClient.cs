@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using HalDiscrodBot.Utils;
 using HalDiscordBot.Core.Config;
 using System.Linq;
+using HalDiscordBot.Core.CustomLogic;
 
 namespace HalDiscordBot.Core
 {
@@ -69,16 +70,19 @@ namespace HalDiscordBot.Core
             if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.Username, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
             }
             else if (before.VoiceChannel != null && after.VoiceChannel == null)
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} left.");
                 TrackUserExit(user.Username, guild.Name);
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.Username }, mainChannel);
             }
             else if (before.VoiceChannel == null && after.VoiceChannel != null)
             {
                 await mainChannel.SendMessageAsync($"User {user.Username} joined.");
                 TrackUserEnter(user.Username, guild.Name);
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.Username }, mainChannel);
             }
         }
 
@@ -94,6 +98,8 @@ namespace HalDiscordBot.Core
             var result = await _commands.ExecuteAsync(context, argPos, _services);
             if (!result.IsSuccess)
                 await context.Channel.SendMessageAsync(result.ErrorReason);
+
+            LogicExecutor.Exec(LogicType.MessageRecieved, "OnMessageRecieved", new object[] { message }, context.Channel);
         }
 
         private Task Log(LogMessage message)
