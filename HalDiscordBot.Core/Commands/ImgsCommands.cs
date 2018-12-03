@@ -12,7 +12,7 @@ using HalDiscrodBot.Utils;
 
 namespace HalDiscordBot.Core.Commands
 {
-    public class ImgsCommands: CommandBase
+    public class ImgsCommands : CommandBase
     {
         [Command("i")]
         [Summary("Search images through google")]
@@ -62,6 +62,25 @@ namespace HalDiscordBot.Core.Commands
 
         }
 
+        [Command("gif")]
+        [Summary("Random gif")]
+        public async Task Gif([Remainder][Summary("search term")] string search)
+        {
+            RestService restService = new RestService("http://api.giphy.com/v1/gifs/search", HttpVerb.GET);
+            restService.ContentType = "application/json";
+            string parsedText = search.Replace(" ", "+");
+            var response = restService.MakeRequest($"?api_key=F6lSsIC0UPOhKTkvkwwv3M7wUW09VRV1&q={parsedText}");
+            var result = JObject.Parse(await response);
+            var data = result["data"] as JArray;
+            var resultMessage = "Gif non trovata";
+            if (data != null)
+            {
+                var rng = new Random();
+                JToken item = data[rng.Next(0, data.Count - 1)];
+                resultMessage = item["embed_url"].Value<string>();
+            }
 
+            await ReplyAsync(resultMessage);
+        }
     }
 }
