@@ -42,26 +42,6 @@ namespace HalDiscordBot.Core.Commands
             await ReplyAsync(link);
         }
 
-        [Command("memelist")]
-        [Summary("List of avaiable memes")]
-        public async Task MemeList()
-        {
-            RestService restService = new RestService("https://memegen.link/api/templates/", HttpVerb.GET);
-            var response = await restService.MakeRequest();
-            var parsed = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);
-            var memes = parsed.Select(entry => Path.GetFileName(entry.Value));
-            await Context.Channel.SendTableAsync(memes, x => $"{x,-17}", 3);
-        }
-
-        [Command("memegen")]
-        [Summary("Generate meme")]
-        public async Task MemeGen([Summary("meme type")] string meme, [Summary("top text")] string top, [Remainder][Summary("bottom text")]string bottom)
-        {
-            var url = $"http://memegen.link/{meme}/{top}/{bottom}.jpg";
-            await Context.Channel.SendMessageAsync(url);
-
-        }
-
         [Command("gif")]
         [Summary("Random gif")]
         public async Task Gif([Remainder][Summary("search term")] string search)
