@@ -11,7 +11,7 @@ namespace HalDiscordBot.Core.Commands
 {
     public class AudioCommands : CommandBase
     {
-         [Command("a", RunMode = RunMode.Async)]
+         [Command("a")]
          [Summary("Play the specified audio file")]
         public async Task PlayAudio([Remainder] [Summary("Name of the file to play")] string fileName)
         {
@@ -28,7 +28,6 @@ namespace HalDiscordBot.Core.Commands
             var discord = audioClient.CreatePCMStream(AudioApplication.Mixed);
             await output.CopyToAsync(discord);
             await discord.FlushAsync();
-            await audioClient.StopAsync();
         }
 
         [Command("alist")]
@@ -37,16 +36,7 @@ namespace HalDiscordBot.Core.Commands
         {
             var path = Path.Combine(Environment.CurrentDirectory, "AudioFiles");
             var files = Directory.EnumerateFiles(path, "*.mp3", SearchOption.TopDirectoryOnly);
-            var result = string.Empty;
-
-            if(files.Count() > 0)
-            {
-                foreach (var file in files)
-                {
-                    result += Path.GetFileName(file) + "\n";
-                }
-            }
-
+            var result = string.Join("\n", files);
             await ReplyAsync(result);
         }
 
