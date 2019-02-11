@@ -12,7 +12,7 @@ namespace HalDiscordBot.Core.CustomLogic
         public static void Exec(LogicType type, string methodName, object[] args, ISocketMessageChannel currentChannel)
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
-            var logics = types.Where(tp => tp.IsClass && tp.Namespace == $"HalDiscordBot.Core.CustomLogic.{type.ToString()}");
+            var logics = types.Where(tp => tp.IsClass && tp.Namespace == $"HalDiscordBot.Core.CustomLogic.{type.ToString()}" && tp.Attributes == TypeAttributes.Public);
             foreach (var logic in logics)
             {
                 var ctor = logic.GetConstructor(new Type[] { typeof(ISocketMessageChannel) });
