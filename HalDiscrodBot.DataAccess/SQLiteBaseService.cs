@@ -26,10 +26,10 @@ namespace HalDiscrodBot.DataAccess
 
         public SQLiteBaseService(string tBName)
         {
-            _databaseFolder = Environment.CurrentDirectory + "\\Database";
-            _databasePath = Environment.CurrentDirectory + "\\Database\\HalDatabase.db";
+            _databaseFolder = Path.Combine(Environment.CurrentDirectory, "Database");
+            _databasePath = Path.Combine(Environment.CurrentDirectory, "Database", "HalDatabase.db");
             _connectionString = "DataSource=" + _databasePath + ";Version=3;";
-            _sqlScriptPath = Environment.CurrentDirectory + "\\SQLScripts\\";
+            _sqlScriptPath = Path.Combine(Environment.CurrentDirectory, "SQLScripts");
 
             if (!Directory.Exists(_databaseFolder))
             {
