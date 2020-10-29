@@ -16,10 +16,15 @@ namespace HalDiscordBot.Core.Commands
         public async Task Prune([Remainder] [Summary("The user to prune")] string userName)
         {
             string userToPrune = !string.IsNullOrEmpty(userName) ? userName : "HAL";
-            var messages = await Context.Channel.GetMessagesAsync(20).ToList();
+            var messages = await Context.Channel.GetMessagesAsync(20).ToListAsync();
             var transormed = messages.SelectMany(msg => msg);
             var toDelete = transormed.Where(msg => msg.Author.Username == userToPrune);
-            await Context.Channel.DeleteMessagesAsync(toDelete);
+            var tasks = new List<Task>();
+            foreach (var item in toDelete)
+            {
+                tasks.Add(Context.Channel.DeleteMessageAsync(item));
+            }
+            Task.WaitAll(tasks.ToArray());
         }
 
         [Command("color")]
@@ -54,7 +59,7 @@ namespace HalDiscordBot.Core.Commands
             }
             else if (role == null)
             {
-                var newRole = await Context.Guild.CreateRoleAsync(Context.User.Username + "-Color", null, actualColor);
+                var newRole = await Context.Guild.CreateRoleAsync(Context.User.Username + "-Color", null, actualColor, false, null);
                 var castedUser = Context.User as SocketGuildUser;
                 try
                 {
