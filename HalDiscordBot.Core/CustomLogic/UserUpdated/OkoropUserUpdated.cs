@@ -20,7 +20,7 @@ namespace HalDiscordBot.Core.CustomLogic.UserUpdated
         {
             if (user == "okorop")
             {
-                var users = _currentChannel.GetUsersAsync().ToList().GetAwaiter().GetResult().SelectMany(u => u);
+                var users = _currentChannel.GetUsersAsync().ToListAsync().GetAwaiter().GetResult().SelectMany(u => u);
                 var desiredUser = users.First(u => u.Username == user) as SocketGuildUser;
                 desiredUser.ModifyAsync((prop) => { prop.Mute = true; });
                 _userToUnmuteRef = desiredUser;
