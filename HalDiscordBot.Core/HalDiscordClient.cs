@@ -53,7 +53,7 @@ namespace HalDiscordBot.Core
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
-                await _commands.AddModulesAsync(assembly);
+                await _commands.AddModulesAsync(assembly, _services);
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();

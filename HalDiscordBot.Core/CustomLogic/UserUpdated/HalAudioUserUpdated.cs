@@ -3,6 +3,7 @@ using HalDiscordBot.Core.CustomLogic.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HalDiscordBot.Core.CustomLogic.UserUpdated
 {
@@ -32,13 +33,17 @@ namespace HalDiscordBot.Core.CustomLogic.UserUpdated
         {
             if (userName == "HAL")
             {
-                var message = _currentChannel.GetMessagesAsync(3).ToList();
+                var message = _currentChannel.GetMessagesAsync(3).ToListAsync();
                 var transformed = message.GetAwaiter().GetResult().SelectMany(msg => msg);
                 if(transformed.Any(msg => msg.Content.Contains("$a")))
                 {
                     var hallogs = transformed.Where(msg => msg.Author.Username == "HAL");
-                    var task = _currentChannel.DeleteMessagesAsync(hallogs);
-                    task.GetAwaiter().GetResult();
+                    var tasks = new List<Task>();
+                    foreach (var item in hallogs)
+                    {
+                        tasks.Add(_currentChannel.DeleteMessageAsync(item));
+                    }
+                    Task.WaitAll(tasks.ToArray());
                 }
             }
         }
