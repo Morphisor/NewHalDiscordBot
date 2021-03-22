@@ -9,17 +9,17 @@ namespace HalDiscordBot.Core.Commands
 {
     public abstract class CommandBase : ModuleBase<SocketCommandContext>
     {
-        protected SQLiteLogger _SQLiteLogger;
+        protected ConsoleLogger _consoleLogger;
 
         public CommandBase()
         {
-            _SQLiteLogger = SQLiteLogger.Instance;
+            _consoleLogger = ConsoleLogger.Instance;
         }
 
         protected async Task HandleError(string message, Exception ex)
         {
             await Context.Channel.SendMessageAsync("Something went wrong!");
-            _SQLiteLogger.LogError(message, ex.Message, ex.StackTrace);
+            _consoleLogger.Log(message, ex);
         }
     }
 }

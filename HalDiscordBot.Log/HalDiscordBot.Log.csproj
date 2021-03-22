@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HalDiscordBot.Models\HalDiscordBot.Models.csproj" />
-    <ProjectReference Include="..\HalDiscrodBot.DataAccess\HalDiscrodBot.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
