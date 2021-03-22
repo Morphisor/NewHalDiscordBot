@@ -49,7 +49,9 @@ jobs:
       - name: Setup bot configuratiotn
         run: |
           mkdir -p ./HalDiscrodBot.Console/Config
-          echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscrodBot.Console/Config/config.json
+          echo "$secrets.DISCORD_CONFIG" > ./HalDiscrodBot.Console/Config/config.json
+        env:
+          DISCORD_CONFIG: ${{ secrets.DISCORD_CONFIG }}
           
       # Build and push image
       - name: Build and Push
