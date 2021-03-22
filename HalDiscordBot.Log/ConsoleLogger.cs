@@ -22,7 +22,7 @@ namespace HalDiscordBot.Log
 
         private ConsoleLogger() { }
 
-        public void Log(string msg)
+        public void Log(string msg, Exception ex = null)
         {
             Console.WriteLine(msg);
         }

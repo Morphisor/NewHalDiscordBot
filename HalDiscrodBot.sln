@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscrodBot.Console", "HalDiscrodBot.Console\HalDiscrodBot.Console.csproj", "{A59FD999-FDC1-48DF-941C-A76012262D40}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscordBot.Log", "HalDiscordBot.Log\HalDiscordBot.Log.csproj", "{09A26C9F-771F-4CC7-BED7-F987191FD6E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscordBot.Rest", "HalDiscordBot.Rest\HalDiscordBot.Rest.csproj", "{FEABD86B-E90C-405D-B3BC-28608CD67D0A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscrodBot.DataAccess", "HalDiscrodBot.DataAccess\HalDiscrodBot.DataAccess.csproj", "{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalDiscrodBot.Utils", "HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj", "{42B66654-FFA4-4E41-B6A5-68A1433F9269}"
 EndProject
@@ -57,14 +55,6 @@ Global
 		{FEABD86B-E90C-405D-B3BC-28608CD67D0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEABD86B-E90C-405D-B3BC-28608CD67D0A}.Release|x86.ActiveCfg = Release|x86
 		{FEABD86B-E90C-405D-B3BC-28608CD67D0A}.Release|x86.Build.0 = Release|x86
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Debug|x86.ActiveCfg = Debug|x86
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Debug|x86.Build.0 = Debug|x86
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Release|x86.ActiveCfg = Release|x86
-		{84A62B1E-CA9E-4C4C-A574-AD30BA7A955D}.Release|x86.Build.0 = Release|x86
 		{42B66654-FFA4-4E41-B6A5-68A1433F9269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42B66654-FFA4-4E41-B6A5-68A1433F9269}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42B66654-FFA4-4E41-B6A5-68A1433F9269}.Debug|x86.ActiveCfg = Debug|x86

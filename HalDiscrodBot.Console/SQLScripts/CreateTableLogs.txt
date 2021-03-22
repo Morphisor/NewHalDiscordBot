@@ -1,8 +1,0 @@
-﻿CREATE TABLE IF NOT EXISTS hal_logs(
-	LogId INTEGER PRIMARY KEY AUTOINCREMENT,
-	LogMessage TEXT,
-	CreateDate INTEGER,
-	LogSeverity TEXT,
-	Source TEXT,
-	ExceptionMessage TEXT
-);
