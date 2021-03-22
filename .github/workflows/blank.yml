@@ -48,7 +48,6 @@ jobs:
       #Setup bot configuration
       - name: Setup bot configuratiotn
         run: |
-          ls ./HalDiscrodBot.Console/app/
           mkdir -p ./HalDiscrodBot.Console/Config
           echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscrodBot.Console/Config/config.json
           
