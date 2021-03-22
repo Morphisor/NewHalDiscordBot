@@ -15,4 +15,12 @@
     <ProjectReference Include="..\HalDiscrodBot.Utils\HalDiscrodBot.Utils.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
+  </PropertyGroup>
+
+
 </Project>
