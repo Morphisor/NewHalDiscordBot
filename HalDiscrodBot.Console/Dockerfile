@@ -2,5 +2,4 @@
 WORKDIR /app
 COPY ./app .
 COPY ./Config ./Config
-COPY ./ffmpeg ./ffmpeg
 ENTRYPOINT ["dotnet", "HalDiscrodBot.Console.dll"]
