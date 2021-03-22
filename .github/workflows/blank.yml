@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./HalDiscrodBot.Console
-          file: Dockerfile
+          file: ./HalDiscrodBot.Console/Dockerfile
           push: true
           tags: augustogallitri/haldiscordbot:latest
           
