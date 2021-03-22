@@ -31,7 +31,7 @@ jobs:
       - name: dotnet build and publish
         run: |
           dotnet build --configuration Release
-          dotnet publish -c Release -o '${{ env.PACKAGE_PATH }}/app'
+          dotnet publish -c Release -o '${{ env.PACKAGE_PATH }}/app' -r linux-x64
 
       # Login to dockerhub        
       - name: Login to DockerHub
