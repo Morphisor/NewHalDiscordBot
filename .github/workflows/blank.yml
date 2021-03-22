@@ -48,6 +48,8 @@ jobs:
       #Setup bot configuration
       - name: Setup bot configuratiotn
         run: |
+          ls
+          pwd
           mkdir ./HalDiscordBot.Console/Config
           echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscordBot.Console/Config
           
