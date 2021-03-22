@@ -3,6 +3,5 @@ WORKDIR /app
 COPY ./app .
 COPY ./Config ./Config
 COPY ./ffmpeg ./ffmpeg
-COPY ./x86 ./x86
-COPY ./x64 ./x64
+COPY ./runtimes ./runtimes
 ENTRYPOINT ["dotnet", "HalDiscrodBot.Console.dll"]
