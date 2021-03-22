@@ -1,13 +1,38 @@
-name: CI
 
-on: [push]
+name: Deploy docker image
 
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+      
+env:
+  PACKAGE_PATH: '.'
+  DOTNET_VERSION: '2.1.808'
+  
 jobs:
-  build:
-
-    runs-on: windows-latest
-    
+  build_and-deploy:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/dotnetcore-cli
-    - name: build
-      run: build ./HalDiscrodBot.sln
+    
+      # Checkout the repo
+      - uses: actions/checkout@master
+      
+      # Setup .NET Core
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      # Run dotnet build and pulbish
+      - name: dotnet build and publish
+        run: |
+          dotnet build --configuration Release
+          dotnet publish -c Release -o '${{ env.PACKAGE_PATH }}/app'
+          
+      #Build docker image
+        
+    
