@@ -16,4 +16,10 @@
     <ProjectReference Include="..\HalDiscordBot.Core\HalDiscordBot.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ffmpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
