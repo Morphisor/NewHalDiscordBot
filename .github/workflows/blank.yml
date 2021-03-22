@@ -14,7 +14,7 @@ env:
   DOTNET_VERSION: '2.1.808'
   
 jobs:
-  build_and-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     
@@ -32,7 +32,37 @@ jobs:
         run: |
           dotnet build --configuration Release
           dotnet publish -c Release -o '${{ env.PACKAGE_PATH }}/app'
+
+      # Login to dockerhub        
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           
-      #Build docker image
+      # Setup Docker Buildx
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
         
+      #Setup bot configuration
+      - name: Setup bot configuratiotn
+        run: |
+          mkdir ./HalDiscordBot.Console/Config
+          echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscordBot.Console/Config
+          
+      # Build and push image
+      - name: Build and Push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./HalDiscordBot.Console/
+          file: ./Dockerfile
+          push: true
+          tags: augustogallitri/haldiscordbot:latest
+          
+
+        
+      
+      
     
