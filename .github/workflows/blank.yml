@@ -48,6 +48,10 @@ jobs:
       #Setup bot configuration
       - name: Setup bot configuratiotn
         run: |
+          ls ./HalDiscrodBot.DataAccess/
+          ls ./HalDiscrodBot.DataAccess/app
+          mv ./HalDiscrodBot.DataAccess/app/x86 ./HalDiscrodBot.Console/x86
+          mv ./HalDiscrodBot.DataAccess/app/x64 ./HalDiscrodBot.Console/x64
           mkdir -p ./HalDiscrodBot.Console/Config
           echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscrodBot.Console/Config/config.json
           
