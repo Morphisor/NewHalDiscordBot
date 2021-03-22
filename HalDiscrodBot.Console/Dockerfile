@@ -2,4 +2,6 @@
 WORKDIR /app
 COPY ./app .
 COPY ./Config ./Config
+RUN apt-get update \
+    apt-get install -y libunwind8
 ENTRYPOINT ["dotnet", "HalDiscrodBot.Console.dll"]
