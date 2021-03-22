@@ -3,5 +3,6 @@ WORKDIR /app
 COPY ./app .
 COPY ./Config ./Config
 COPY ./ffmpeg ./ffmpeg
-COPY ./SQLite.Interop.dll ./SQLite.Interop.dll
+COPY ./x86 ./x86
+COPY ./x64 ./x64
 ENTRYPOINT ["dotnet", "HalDiscrodBot.Console.dll"]
