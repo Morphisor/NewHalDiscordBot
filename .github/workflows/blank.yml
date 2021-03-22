@@ -49,6 +49,7 @@ jobs:
       - name: Setup bot configuratiotn
         run: |
           mv ./HalDiscrodBot.DataAccess/app/runtimes/linux-x64/native/SQLite.Interop.dll ./HalDiscrodBot.Console/SQLite.Interop.dll
+          ls ./HalDiscrodBot.Console/
           mkdir -p ./HalDiscrodBot.Console/Config
           echo "${{secrets.DISCORD_CONFIG}}" > ./HalDiscrodBot.Console/Config/config.json
           
