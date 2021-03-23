@@ -97,9 +97,6 @@ namespace HalDiscordBot.Core
 
         private Task Log(LogMessage message)
         {
-            if (message.IsError())
-                _consoleLogger.Log(message.Message, message.Exception);
-
             _consoleLogger.Log(message.ToString());
             return Task.CompletedTask;
         }
