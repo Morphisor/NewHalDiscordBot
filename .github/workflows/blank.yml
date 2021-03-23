@@ -49,7 +49,7 @@ jobs:
       - name: Setup bot configuratiotn
         run: |
           mkdir -p ./HalDiscrodBot.Console/Config
-          mv ./app ./HalDiscrodBot.Console
+          mv ./app ./HalDiscrodBot.Console/app
           echo "$DISCORD_CONFIG" > ./HalDiscrodBot.Console/Config/config.json
         env:
           DISCORD_CONFIG: ${{ secrets.DISCORD_CONFIG }}
