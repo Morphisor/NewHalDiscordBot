@@ -8,6 +8,9 @@ namespace HalDiscordBot.Log
     {
         private static ConsoleLogger _instance;
 
+        private static string _separator = "════════════════════════════════════════════════";
+        private static string _innerSeparator = "-------------------------------------";
+
         public static ConsoleLogger Instance
         {
             get
@@ -24,7 +27,14 @@ namespace HalDiscordBot.Log
 
         public void Log(string msg, Exception ex = null)
         {
+            Console.WriteLine(_separator);
             Console.WriteLine(msg);
+
+            if (ex != null)
+            {
+                Console.WriteLine(_innerSeparator);
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
