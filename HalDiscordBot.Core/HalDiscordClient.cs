@@ -62,6 +62,8 @@ namespace HalDiscordBot.Core
             var guild = userCasted.Guild;
             var mainChannel = guild.TextChannels.First(cnl => cnl.Name == _configService.Config.MainChannelName);
 
+            _consoleLogger.Log("UserVoiceStateUpdated, user:" + user.Username);
+
             if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
                 Task.Run(async () =>
