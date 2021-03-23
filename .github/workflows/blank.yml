@@ -11,7 +11,7 @@ on:
       
 env:
   PACKAGE_PATH: '.'
-  DOTNET_VERSION: '2.1.808'
+  DOTNET_VERSION: '5.0.100'
   
 jobs:
   build-and-deploy:
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@master
       
       # Setup .NET Core
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with: 
           dotnet-version: ${{ env.DOTNET_VERSION }}
