@@ -56,7 +56,7 @@ namespace HalDiscordBot.Core
             await Task.Delay(-1);
         }
 
-        private async Task UserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
+        private Task UserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
         {
             var userCasted = user as SocketGuildUser;
             var guild = userCasted.Guild;
@@ -64,19 +64,30 @@ namespace HalDiscordBot.Core
 
             if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.Username, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
+                Task.Run(async () =>
+                {
+                    await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
+                    LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.Username, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
+                });
             }
             else if (before.VoiceChannel != null && after.VoiceChannel == null)
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} left.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.Username }, mainChannel);
+                Task.Run(async () =>
+                {
+                    await mainChannel.SendMessageAsync($"User {user.Username} left.");
+                    LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.Username }, mainChannel);
+                });
             }
             else if (before.VoiceChannel == null && after.VoiceChannel != null)
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} joined.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.Username }, mainChannel);
+                Task.Run(async () =>
+                {
+                    await mainChannel.SendMessageAsync($"User {user.Username} joined.");
+                    LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.Username }, mainChannel);
+                });
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task MessageRecieved(SocketMessage message)
