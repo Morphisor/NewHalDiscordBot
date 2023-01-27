@@ -9,5 +9,6 @@ namespace HalDiscordBot.Models.Misc
         public string Token { get; set; }
         public string GuildName { get; set; }
         public string MainChannelName { get; set; }
+        public string OpenAIToken { get; set; }
     }
 }

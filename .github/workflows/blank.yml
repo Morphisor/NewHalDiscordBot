@@ -11,7 +11,7 @@ on:
       
 env:
   PACKAGE_PATH: './HalDiscrodBot.Console'
-  DOTNET_VERSION: '5.0.100'
+  DOTNET_VERSION: '7.0.x'
   
 jobs:
   build-and-deploy:
