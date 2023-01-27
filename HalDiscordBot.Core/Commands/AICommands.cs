@@ -39,6 +39,6 @@ namespace HalDiscordBot.Core.Commands
             {
                 await HandleError("Error generating image", ex);
             }
-        }
+        } 
     }
 }
