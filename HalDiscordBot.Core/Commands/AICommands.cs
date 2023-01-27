@@ -39,6 +39,31 @@ namespace HalDiscordBot.Core.Commands
             {
                 await HandleError("Error generating image", ex);
             }
-        } 
+        }
+
+        [Command("ask")]
+        [Summary("Use open ai to generate a response")]
+        public async Task Ask([Remainder][Summary("The question asked")] string question)
+        {
+            try
+            {
+                var aiClient = new OpenAIService(new OpenAiOptions { ApiKey = ConfigurationService.Instance.Config.OpenAIToken });
+                var completionResult = await aiClient.Completions.CreateCompletion(new CompletionCreateRequest
+                {
+                    Prompt= question,
+                    Model = OpenAI.GPT3.ObjectModels.Models.TextDavinciV3,
+                    MaxTokens = 2048
+                });
+
+                if (completionResult.Successful)
+                    await Context.Channel.SendMessageAsync(completionResult.Choices.First().Text);
+                else
+                    await Context.Channel.SendMessageAsync($"{completionResult.Error.Code}: {completionResult.Error.Message}");
+            }
+            catch (Exception ex)
+            {
+                await HandleError("Error generating image", ex);
+            }
+        }
     }
 }
