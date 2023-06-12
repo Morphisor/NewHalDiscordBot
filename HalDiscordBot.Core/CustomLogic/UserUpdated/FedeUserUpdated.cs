@@ -31,7 +31,7 @@ namespace HalDiscordBot.Core.CustomLogic.UserUpdated
 
         private void RemoveLog(string userName)
         {
-            if(userName == "Federik")
+            if(userName == "federik04")
             {
                 var message = _currentChannel.GetMessagesAsync(1).ToListAsync();
                 var transformed = message.GetAwaiter().GetResult().SelectMany(msg => msg);
