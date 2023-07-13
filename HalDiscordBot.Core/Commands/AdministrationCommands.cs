@@ -18,7 +18,7 @@ namespace HalDiscordBot.Core.Commands
             string userToPrune = !string.IsNullOrEmpty(userName) ? userName : "HAL";
             var messages = await Context.Channel.GetMessagesAsync(20).ToListAsync();
             var transormed = messages.SelectMany(msg => msg);
-            var toDelete = transormed.Where(msg => msg.Author.Username == userToPrune);
+            var toDelete = transormed.Where(msg => msg.Author.GlobalName == userToPrune);
             var tasks = new List<Task>();
             foreach (var item in toDelete)
             {
@@ -59,7 +59,7 @@ namespace HalDiscordBot.Core.Commands
             }
             else if (role == null)
             {
-                var newRole = await Context.Guild.CreateRoleAsync(Context.User.Username + "-Color", null, actualColor, false, null);
+                var newRole = await Context.Guild.CreateRoleAsync(Context.User.Username + "-Color", null, actualColor, false);
                 var castedUser = Context.User as SocketGuildUser;
                 try
                 {
@@ -78,7 +78,7 @@ namespace HalDiscordBot.Core.Commands
         [Summary("Kicks the specyfied user")]
         public async Task Kick([Remainder] [Summary("The user to kick")] string userName)
         {
-            var user = Context.Guild.Users.FirstOrDefault(usr => usr.Username == userName);
+            var user = Context.Guild.Users.FirstOrDefault(usr => usr.GlobalName == userName);
 
             if (user == null || (user != null && user.VoiceChannel == null))
             {

@@ -32,7 +32,12 @@ namespace HalDiscordBot.Core
 
         public async Task Connect()
         {
-            _client = new DiscordSocketClient();
+            var config = new DiscordSocketConfig()
+            {
+                GatewayIntents = GatewayIntents.All,
+            };
+
+            _client = new DiscordSocketClient(config);
             _commands = new CommandService();
             _client.Log += Log;
 
@@ -64,18 +69,18 @@ namespace HalDiscordBot.Core
 
             if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.Username, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {user.GlobalName} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.GlobalName, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
             }
             else if (before.VoiceChannel != null && after.VoiceChannel == null)
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} left.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.Username }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {user.GlobalName} left.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.GlobalName }, mainChannel);
             }
             else if (before.VoiceChannel == null && after.VoiceChannel != null)
             {
-                await mainChannel.SendMessageAsync($"User {user.Username} joined.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.Username }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {user.GlobalName} joined.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.GlobalName }, mainChannel);
             }
         }
 
