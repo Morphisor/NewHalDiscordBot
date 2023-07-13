@@ -18,7 +18,11 @@ namespace HalDiscordBot.Core.Commands
             string userToPrune = !string.IsNullOrEmpty(userName) ? userName : "HAL";
             var messages = await Context.Channel.GetMessagesAsync(20).ToListAsync();
             var transormed = messages.SelectMany(msg => msg);
-            var toDelete = transormed.Where(msg => msg.Author.GlobalName == userToPrune);
+
+            var toDelete = transormed.Where(msg => 
+            msg.Author is SocketGuildUser && (msg.Author as SocketGuildUser).DisplayName == userToPrune
+            || msg.Author.Username == userToPrune);
+
             var tasks = new List<Task>();
             foreach (var item in toDelete)
             {
