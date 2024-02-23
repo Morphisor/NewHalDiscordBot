@@ -66,21 +66,22 @@ namespace HalDiscordBot.Core
             var userCasted = user as SocketGuildUser;
             var guild = userCasted.Guild;
             var mainChannel = guild.TextChannels.First(cnl => cnl.Name == _configService.Config.MainChannelName);
+            var userName = !string.IsNullOrEmpty(user.GlobalName) ? user.GlobalName : user.Username;
 
             if (before.VoiceChannel != null && after.VoiceChannel != null && before.VoiceChannel.Name != after.VoiceChannel.Name && after.VoiceChannel.Name != "KickChannel")
             {
-                await mainChannel.SendMessageAsync($"User {user.GlobalName} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { user.GlobalName, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {userName} moved from {before.VoiceChannel.Name} to {after.VoiceChannel.Name}.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserMoved", new object[] { userName, before.VoiceChannel.Name, after.VoiceChannel.Name }, mainChannel);
             }
             else if (before.VoiceChannel != null && after.VoiceChannel == null)
             {
-                await mainChannel.SendMessageAsync($"User {user.GlobalName} left.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { user.GlobalName }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {userName} left.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserLeft", new object[] { userName }, mainChannel);
             }
             else if (before.VoiceChannel == null && after.VoiceChannel != null)
             {
-                await mainChannel.SendMessageAsync($"User {user.GlobalName} joined.");
-                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { user.GlobalName }, mainChannel);
+                await mainChannel.SendMessageAsync($"User {userName} joined.");
+                LogicExecutor.Exec(LogicType.UserUpdated, "UserJoined", new object[] { userName }, mainChannel);
             }
         }
 
