@@ -54,6 +54,37 @@ namespace HalDiscordBot.Core.Commands
         [Summary("Record channel audio")]
         public async Task RecordAudio([Remainder][Summary("The username of the user")] string userName)
         {
+            await RecordAudioForUser(userName);
+        }
+
+        [Command("m", RunMode = RunMode.Async)]
+        [Summary("Record channel audio of Martinez")]
+        public async Task RecordAudioMartinez()
+        {
+            await RecordAudioForUser("masterfailrambo", 300000);
+        }
+
+        [Command("alist")]
+        [Summary("List of avaiable audio files")]
+        public async Task ListAudioFiles()
+        {
+            var path = Path.Combine(Environment.CurrentDirectory, "AudioFiles");
+            var files = Directory.EnumerateFiles(path, "*.mp3", SearchOption.TopDirectoryOnly);
+            var result = string.Empty;
+
+            if (files.Count() > 0)
+            {
+                foreach (var file in files)
+                {
+                    result += Path.GetFileName(file) + "\n";
+                }
+            }
+
+            await ReplyAsync(result);
+        }
+
+        private async Task RecordAudioForUser(string userName, int duration = 30000) 
+        {
             var user = Context.Guild.Users.FirstOrDefault(usr => usr.DisplayName == userName);
 
             var voiceChannel = user.VoiceChannel;
@@ -75,7 +106,7 @@ namespace HalDiscordBot.Core.Commands
                             var stopwatch = new Stopwatch();
                             stopwatch.Start();
 
-                            while (stopwatch.ElapsedMilliseconds < 15000)
+                            while (stopwatch.ElapsedMilliseconds < duration)
                             {
                                 await user.AudioStream.ReadAsync(buffer, 0, buffer.Length);
                                 await ffmpegOutStdinStream.WriteAsync(buffer, 0, buffer.Length);
@@ -95,30 +126,14 @@ namespace HalDiscordBot.Core.Commands
                         }
                     }
                 }
+
+                var textChannel = Context.Guild.TextChannels.Single(c => c.Name == "general");
+                await textChannel.SendFileAsync(path, "Use it wisely young padawan");
             }
             catch (Exception e)
             {
                 _consoleLogger.Log($"Error while recording, {e.Message}");
             }
-        }
-
-        [Command("alist")]
-        [Summary("List of avaiable audio files")]
-        public async Task ListAudioFiles()
-        {
-            var path = Path.Combine(Environment.CurrentDirectory, "AudioFiles");
-            var files = Directory.EnumerateFiles(path, "*.mp3", SearchOption.TopDirectoryOnly);
-            var result = string.Empty;
-
-            if (files.Count() > 0)
-            {
-                foreach (var file in files)
-                {
-                    result += Path.GetFileName(file) + "\n";
-                }
-            }
-
-            await ReplyAsync(result);
         }
 
         private Process CreateStream(string fileName)
