@@ -57,50 +57,48 @@ namespace HalDiscordBot.Core.Commands
             var user = Context.Guild.Users.FirstOrDefault(usr => usr.DisplayName == userName);
 
             var voiceChannel = user.VoiceChannel;
-
-            try
-            {
-                var audioClient = await voiceChannel.ConnectAsync();
-            }
-            catch (Exception ex)
-            {
-                _consoleLogger.Log($"Error while recording, {ex.Message}");
-            }
+            var audioClient = await voiceChannel.ConnectAsync();
 
             var path = Path.Combine(Environment.CurrentDirectory, "Recording.m4a");
             if (File.Exists(path)) File.Delete(path);
 
-
-            using (var ffmpeg = CreateFfmpegOut(path))
+            try
             {
-                using (var ffmpegOutStdinStream = ffmpeg.StandardInput.BaseStream)
+                using (var ffmpeg = CreateFfmpegOut(path))
                 {
-                    try
+                    using (var ffmpegOutStdinStream = ffmpeg.StandardInput.BaseStream)
                     {
-                        var buffer = new byte[3840];
-
-                        var stopwatch = new Stopwatch();
-                        stopwatch.Start();
-
-                        while (stopwatch.ElapsedMilliseconds < 15000)
+                        try
                         {
-                            await user.AudioStream.ReadAsync(buffer, 0, buffer.Length);
-                            await ffmpegOutStdinStream.WriteAsync(buffer, 0, buffer.Length);
+                            var buffer = new byte[3840];
+
+                            var stopwatch = new Stopwatch();
+                            stopwatch.Start();
+
+                            while (stopwatch.ElapsedMilliseconds < 15000)
+                            {
+                                await user.AudioStream.ReadAsync(buffer, 0, buffer.Length);
+                                await ffmpegOutStdinStream.WriteAsync(buffer, 0, buffer.Length);
+                                await ffmpegOutStdinStream.FlushAsync();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _consoleLogger.Log($"Error while recording, {e.Message}");
+                        }
+                        finally
+                        {
                             await ffmpegOutStdinStream.FlushAsync();
+                            ffmpegOutStdinStream.Close();
+                            ffmpeg.Close();
+                            await voiceChannel.DisconnectAsync();
                         }
                     }
-                    catch (Exception e)
-                    {
-                        _consoleLogger.Log($"Error while recording, {e.Message}");
-                    }
-                    finally
-                    {
-                        await ffmpegOutStdinStream.FlushAsync();
-                        ffmpegOutStdinStream.Close();
-                        ffmpeg.Close();
-                        await voiceChannel.DisconnectAsync();
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                _consoleLogger.Log($"Error while recording, {e.Message}");
             }
         }
 
