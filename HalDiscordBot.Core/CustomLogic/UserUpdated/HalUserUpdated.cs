@@ -33,11 +33,12 @@ namespace HalDiscordBot.Core.CustomLogic.UserUpdated
         {
             if(userName == "HAL")
             {
-                var message = _currentChannel.GetMessagesAsync(1).ToListAsync();
+                var message = _currentChannel.GetMessagesAsync(2).ToListAsync();
                 var transformed = message.GetAwaiter().GetResult().SelectMany(msg => msg);
                 var tasks = new List<Task>();
                 foreach (var item in transformed)
                 {
+                    if (item.Content.Contains("joined.") || item.Content.Contains("left."))
                     tasks.Add(_currentChannel.DeleteMessageAsync(item));
                 }
                 Task.WaitAll(tasks.ToArray());
