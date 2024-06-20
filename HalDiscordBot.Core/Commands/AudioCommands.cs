@@ -57,7 +57,15 @@ namespace HalDiscordBot.Core.Commands
             var user = Context.Guild.Users.FirstOrDefault(usr => usr.DisplayName == userName);
 
             var voiceChannel = user.VoiceChannel;
-            var audioClient = await voiceChannel.ConnectAsync();
+
+            try
+            {
+                var audioClient = await voiceChannel.ConnectAsync();
+            }
+            catch (Exception ex)
+            {
+                _consoleLogger.Log($"Error while recording, {ex.Message}");
+            }
 
             var path = Path.Combine(Environment.CurrentDirectory, "Recording.m4a");
             if (File.Exists(path)) File.Delete(path);
