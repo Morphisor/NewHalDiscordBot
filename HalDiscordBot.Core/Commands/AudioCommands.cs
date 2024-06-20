@@ -1,4 +1,5 @@
-﻿using Discord.Audio;
+﻿using Discord;
+using Discord.Audio;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -14,7 +15,7 @@ namespace HalDiscordBot.Core.Commands
     {
         [Command("a", RunMode = RunMode.Async)]
         [Summary("Play the specified audio file")]
-        public async Task PlayAudio([Remainder] [Summary("Name of the file to play")] string fileName)
+        public async Task PlayAudio([Remainder][Summary("Name of the file to play")] string fileName)
         {
             var user = Context.Guild.Users.FirstOrDefault(usr => usr.Username == Context.User.Username);
             SocketVoiceChannel voiceChannel = null;
@@ -49,6 +50,52 @@ namespace HalDiscordBot.Core.Commands
             }
         }
 
+        [Command("r", RunMode = RunMode.Async)]
+        [Summary("Record channel audio")]
+        public async Task RecordAudio([Remainder][Summary("The username of the user")] string userName)
+        {
+            var user = Context.Guild.Users.FirstOrDefault(usr => usr.DisplayName == userName);
+
+            var voiceChannel = user.VoiceChannel;
+            var audioClient = await voiceChannel.ConnectAsync();
+
+            var path = Path.Combine(Environment.CurrentDirectory, "Recording.m4a");
+            if (File.Exists(path)) File.Delete(path);
+
+
+            using (var ffmpeg = CreateFfmpegOut(path))
+            {
+                using (var ffmpegOutStdinStream = ffmpeg.StandardInput.BaseStream)
+                {
+                    try
+                    {
+                        var buffer = new byte[3840];
+
+                        var stopwatch = new Stopwatch();
+                        stopwatch.Start();
+
+                        while (stopwatch.ElapsedMilliseconds < 15000)
+                        {
+                            await user.AudioStream.ReadAsync(buffer, 0, buffer.Length);
+                            await ffmpegOutStdinStream.WriteAsync(buffer, 0, buffer.Length);
+                            await ffmpegOutStdinStream.FlushAsync();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _consoleLogger.Log($"Error while recording, {e.Message}");
+                    }
+                    finally
+                    {
+                        await ffmpegOutStdinStream.FlushAsync();
+                        ffmpegOutStdinStream.Close();
+                        ffmpeg.Close();
+                        await voiceChannel.DisconnectAsync();
+                    }
+                }
+            }
+        }
+
         [Command("alist")]
         [Summary("List of avaiable audio files")]
         public async Task ListAudioFiles()
@@ -79,6 +126,17 @@ namespace HalDiscordBot.Core.Commands
                 RedirectStandardOutput = true
             };
             return Process.Start(ffmpeg);
+        }
+
+        private Process CreateFfmpegOut(string path)
+        {
+            return Process.Start(new ProcessStartInfo
+            {
+                FileName = "ffmpeg",
+                Arguments = $"-hide_banner -ac 2 -f s16le -ar 48000 -i pipe:0 -acodec pcm_u8 -ar 22050 -f wav \"{path}\"",
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+            });
         }
     }
 }
