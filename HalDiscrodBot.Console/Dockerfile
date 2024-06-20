@@ -2,6 +2,7 @@
 WORKDIR /app
 COPY ./app .
 COPY ./Config ./Config
-RUN apt-get install -y libsodium-dev
-RUN apt-get install opus-tools
+RUN apt-get update \
+	apt-get install -y libsodium-dev \
+	apt-get install opus-tools
 ENTRYPOINT ["dotnet", "HalDiscrodBot.Console.dll"]
