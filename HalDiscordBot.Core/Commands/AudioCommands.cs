@@ -90,7 +90,7 @@ namespace HalDiscordBot.Core.Commands
             var voiceChannel = user.VoiceChannel;
             var audioClient = await voiceChannel.ConnectAsync();
 
-            var path = Path.Combine(Environment.CurrentDirectory, "Recording.m4a");
+            var path = Path.Combine(Environment.CurrentDirectory, "Recording.mp3");
             if (File.Exists(path)) File.Delete(path);
 
             try
@@ -154,7 +154,8 @@ namespace HalDiscordBot.Core.Commands
             return Process.Start(new ProcessStartInfo
             {
                 FileName = "ffmpeg",
-                Arguments = $"-hide_banner -ac 2 -f s16le -ar 48000 -i pipe:0 -acodec pcm_u8 -ar 22050 -f wav \"{path}\"",
+                //Arguments = $"-hide_banner -ac 2 -f s16le -ar 48000 -i pipe:0 -acodec pcm_u8 -ar 22050 -f wav \"{path}\"",
+                Arguments = $"-hide_banner -loglevel error -ac 2 -f s16le -ar 48000 -i pipe:0 -f mp3 \"{path}\"",
                 UseShellExecute = false,
                 RedirectStandardInput = true,
             });
