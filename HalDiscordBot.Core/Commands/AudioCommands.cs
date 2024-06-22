@@ -52,9 +52,9 @@ namespace HalDiscordBot.Core.Commands
 
         [Command("r", RunMode = RunMode.Async)]
         [Summary("Record channel audio")]
-        public async Task RecordAudio([Remainder][Summary("The username of the user")] string userName)
+        public async Task RecordAudio([Summary("The username of the user")] string userName, [Remainder][Summary("Duration of the recoring")] int duration)
         {
-            await RecordAudioForUser(userName);
+            await RecordAudioForUser(userName, duration);
         }
 
         [Command("m", RunMode = RunMode.Async)]
